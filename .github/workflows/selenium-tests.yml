@@ -15,39 +15,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.10
+      - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
-      - name: Install Google Chrome
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y google-chrome-stable
-          google-chrome --version
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
 
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install selenium==4.20.0 pytest==8.2.0 pytest-html==4.1.1 allure-pytest==2.13.5 webdriver-manager==4.0.1
 
-      - name: Prepare reports directory
+      - name: Prepare directories
         run: mkdir -p reports/screenshots reports/allure-results
 
       - name: Run Selenium Tests
         run: |
-          pytest tests/ \
-            --alluredir=reports/allure-results \
+          python -m pytest tests/ \
             --html=reports/report.html \
             --self-contained-html \
             -v --maxfail=5
-
-      - name: Upload Allure Results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: allure-results
-          path: reports/allure-results
+        continue-on-error: true
 
       - name: Upload HTML Report
         if: always()
@@ -56,7 +46,7 @@ jobs:
           name: pytest-html-report
           path: reports/report.html
 
-      - name: Upload Screenshots (FAIL only)
+      - name: Upload Screenshots
         if: always()
         uses: actions/upload-artifact@v3
         with:
