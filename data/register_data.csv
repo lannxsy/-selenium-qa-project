@@ -1,0 +1,9 @@
+username,email,password,confirm_password,expected,description
+validuser1,valid@test.com,Test@1234,Test@1234,PASS,Registrasi valid semua field benar
+,valid@test.com,Test@1234,Test@1234,FAIL,Username kosong
+validuser2,,Test@1234,Test@1234,FAIL,Email kosong
+validuser3,invalid-email,Test@1234,Test@1234,FAIL,Format email tidak valid
+validuser4,valid2@test.com,123,123,FAIL,Password terlalu pendek
+validuser5,valid3@test.com,Test@1234,WrongPass!,FAIL,Konfirmasi password tidak cocok
+validuser6,valid4@test.com,,Test@1234,FAIL,Password kosong
+existinguser,existing@test.com,Test@1234,Test@1234,FAIL,Username sudah terdaftar
